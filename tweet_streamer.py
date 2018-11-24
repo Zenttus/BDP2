@@ -32,13 +32,13 @@ class DataSaver(StreamListener):
     """
     def __init__(self, verbose):
         self.client_hdfs = InsecureClient(config.HDFS_SERVER)
-        seld.verbose = verbose
+        self.verbose = verbose
 
     def on_data(self, data):
         try:
             if(self.verbose):
                 print(data)
-            with client_hdfs.write(config.OUTPUT_FILE_PATH, encoding = 'utf-8') as writer:
+            with self.client_hdfs.write(config.OUTPUT_FILE_PATH, encoding = 'utf-8') as writer:
                 writer(data)
             return True
         except BaseException as e:
