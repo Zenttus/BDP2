@@ -15,13 +15,13 @@ class TwitterStreamer():
     def __init__(self):
         pass
 
-    def stream_tweets(self, outputFilePath, verbose=True):
+    def stream_tweets(self, verbose=True):
         # Twitter set up and authentication
         auth = OAuthHandler(config.CONSUMER_KEY, config.CONSUMER_SECRET)
         auth.set_access_token(config.ACCESS_TOKEN, config.ACCESS_TOKEN_SECRET)
 
         # Setting output
-        listener = DataSaver(outputFilePath, verbose)
+        listener = DataSaver(verbose)
 
         stream = Stream(auth, listener)
         stream.sample()
