@@ -38,8 +38,7 @@ class DataSaver(StreamListener):
         try:
             if(self.verbose):
                 print(data)
-            with self.client_hdfs.write(config.OUTPUT_FILE_PATH, encoding = 'utf-8') as writer:
-                writer(data)
+            self.client_hdfs.write(config.OUTPUT_FILE_PATH, data = data, append=True, encoding = 'utf-8')
             return True
         except BaseException as e:
             print("Error on_data %s" % str(e))
