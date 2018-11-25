@@ -8,6 +8,7 @@ import config
 
 import sys
 import time
+from time import strftime, gmtime
 
 class TwitterStreamer():
     """
