@@ -27,7 +27,15 @@ class TwitterStreamer():
         listener = DataSaver(verbose)
 
         stream = Stream(auth, listener,stall_warnings=True)
-        stream.sample()
+        try:
+            while True:
+                try:
+                    stream.sample()
+                except KeyboardInterrupt:
+                    print('KEYBOARD INTERRUPT')
+                    return
+                finally:
+                    stream.disconnect()
 
 class DataSaver(StreamListener):
     """
@@ -55,7 +63,7 @@ class DataSaver(StreamListener):
 
     def on_data(self, data):
 
-        if(self.tick-time.clock() > config.INTERVAL):
+        if(time.clock()-self.tick > config.INTERVAL):
             # Time interval completed, reseting and createing a new file
             print("here")
             self.tick = time.clock()
