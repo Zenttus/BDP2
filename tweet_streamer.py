@@ -34,8 +34,9 @@ class TwitterStreamer():
                 except KeyboardInterrupt:
                     print('KEYBOARD INTERRUPT')
                     return
-                finally:
-                    stream.disconnect()
+        finally:
+            stream.disconnect()
+
 
 class DataSaver(StreamListener):
     """
