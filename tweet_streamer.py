@@ -44,7 +44,7 @@ class DataSaver(StreamListener):
 
         # Create new file for tweets
         self.files = [ config.OUTPUT_FILE_PATH + strftime("%d%b%Y%H:%M:%S", gmtime()) + ".json" ]
-        put = subprocess.Popen(["hdfs", "dfs", "-touchz", self.files[-1]], stdin=cat.stdout)
+        put = subprocess.Popen(["hdfs", "dfs", "-touchz", self.files[-1]])
         put.communicate()
 
         # Creates list to keep track of files
@@ -84,6 +84,9 @@ class DataSaver(StreamListener):
 
 if __name__ == '__main__':
 
+    #TODO spark analysis
+    #TODO delete files
+    #TODO gui
     verbose = True  # Print tweets on terminal
 
     if(len(sys.argv)>1):
