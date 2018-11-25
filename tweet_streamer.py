@@ -7,6 +7,7 @@ from hdfs import InsecureClient
 import config
 
 import sys
+import time
 
 class TwitterStreamer():
     """
@@ -28,27 +29,56 @@ class TwitterStreamer():
 
 class DataSaver(StreamListener):
     """
-    Saves and prints the tweets.
+    Saves the tweets in intervals.
     """
     def __init__(self, verbose):
-        self.client_hdfs = InsecureClient(config.HDFS_SERVER)
         self.verbose = verbose
 
+        # Start comunication with HDFS
+        self.client_hdfs = InsecureClient(config.HDFS_SERVER)
+
+        # Start tracking time
+        self.tick = time.clock()
+
+        # Create new file for tweets
+        self.files = [ config.OUTPUT_FILE_PATH + strftime("%d%b%Y%H:%M:%S", gmtime()) + ".json" ]
+        put = Popen(["hdfs", "dfs", "-touchz", self.files[-1]], stdin=cat.stdout)
+        put.communicate()
+
+        # Creates list to keep track of files
+        self.fileList = open(config.LIST_PATH + "tweetsList.txt", "a+")
+        self.fileList.write(self.files[-1] + "\n")
+
     def on_data(self, data):
+
+        if(self.tick-time.clock() > config.INTERVAL):
+            # Time interval completed, reseting and createing a new file
+            self.tick = time.clock()
+            self.files.append(config.OUTPUT_FILE_PATH + strftime("%d%b%Y%H:%M:%S", gmtime()) + ".json")
+            put = Popen(["hdfs", "dfs", "-touchz", self.files[-1]], stdin=cat.stdout)
+            put.communicate()
+            self.fileList.write(self.files[-1] + "\n") #update file list
+
         try:
             if(self.verbose):
                 print(data)
-            self.client_hdfs.write(config.OUTPUT_FILE_PATH, data = data, append=True, encoding = 'utf-8')
+            self.client_hdfs.write(self.files[-1], data = data, append=True, encoding = 'utf-8')
             return True
+
         except BaseException as e:
             print("Error on_data %s" % str(e))
+            self.fileList.close()
+
         return True
 
     def on_error(self, status):
         print(status)
         stream.disconnect()
+        self.fileList.close()
         if status == 420: #Rate limit occurs
             return False
+
+
 
 if __name__ == '__main__':
 
