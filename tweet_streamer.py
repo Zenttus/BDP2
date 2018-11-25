@@ -44,7 +44,7 @@ class DataSaver(StreamListener):
 
         # Create new file for tweets
         self.files = [ config.OUTPUT_FILE_PATH + strftime("%d%b%Y%H:%M:%S", gmtime()) + ".json" ]
-        put = subprocess.Popen(["hdfs", "dfs", "-touchz", self.files[-1]])
+        put = subprocess.Popen(["hdfs ", "dfs ", "-touchz ", self.files[-1]])
         put.communicate()
 
         # Creates list to keep track of files
