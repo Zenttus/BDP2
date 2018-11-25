@@ -4,7 +4,7 @@ ACCESS_TOKEN_SECRET = "mlbraOn2BN33zKXyKQoAITcffSr4We9QMJEs1dgI8NhSn"
 CONSUMER_KEY = "gF2EAOKhqyVllar1eA00tn2DQ"
 CONSUMER_SECRET = "16mW0H8FpPYJIoK6bilxWUzV6Gt2OIWqhjlVqlpSg0l7N46xj5"
 
-HDFS_SERVER = 'http://127.0.0.1:50070'
+HDFS_SERVER = 'http://0.0.0.0:9870'
 OUTPUT_FILE_PATH = "/user/hdfs/tweets/tweets.json" #TODO
 
 KEYWORDS = ["Trump", "Flu", "Zika", "Diarrhea", "Ebola", "Headache", "Measles"]
