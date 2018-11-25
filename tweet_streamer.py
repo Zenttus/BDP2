@@ -8,6 +8,7 @@ import config
 
 import sys
 import time
+import subprocess
 from time import strftime, gmtime
 
 class TwitterStreamer():
@@ -43,7 +44,7 @@ class DataSaver(StreamListener):
 
         # Create new file for tweets
         self.files = [ config.OUTPUT_FILE_PATH + strftime("%d%b%Y%H:%M:%S", gmtime()) + ".json" ]
-        put = Popen(["hdfs", "dfs", "-touchz", self.files[-1]], stdin=cat.stdout)
+        put = subprocess.Popen(["hdfs", "dfs", "-touchz", self.files[-1]], stdin=cat.stdout)
         put.communicate()
 
         # Creates list to keep track of files
@@ -56,7 +57,7 @@ class DataSaver(StreamListener):
             # Time interval completed, reseting and createing a new file
             self.tick = time.clock()
             self.files.append(config.OUTPUT_FILE_PATH + strftime("%d%b%Y%H:%M:%S", gmtime()) + ".json")
-            put = Popen(["hdfs", "dfs", "-touchz", self.files[-1]], stdin=cat.stdout)
+            put = subprocess.Popen(["hdfs", "dfs", "-touchz", self.files[-1]], stdin=cat.stdout)
             put.communicate()
             self.fileList.write(self.files[-1] + "\n") #update file list
 
