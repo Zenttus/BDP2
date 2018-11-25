@@ -26,7 +26,7 @@ class TwitterStreamer():
         # Setting output
         listener = DataSaver(verbose)
 
-        stream = Stream(auth, listener,stall_warnings=True)
+        stream = Stream(auth, listener,stall_warnings=True,async=True)
         try:
             while True:
                 try:
