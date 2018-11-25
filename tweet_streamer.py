@@ -2,7 +2,7 @@ from tweepy.streaming import StreamListener
 from tweepy import OAuthHandler
 from tweepy import Stream
 
-from hdfs import InsecureClient
+from pydoop import hdfs
 
 import config
 
@@ -31,14 +31,14 @@ class DataSaver(StreamListener):
     Saves and prints the tweets.
     """
     def __init__(self, verbose):
-        self.client_hdfs = InsecureClient(config.HDFS_SERVER)
         self.verbose = verbose
 
     def on_data(self, data):
         try:
             if(self.verbose):
                 print(data)
-            self.client_hdfs.write(config.OUTPUT_FILE_PATH, data = data, append=True, encoding = 'utf-8')
+            with hdfs.open(config.OUTPUT_FILE_PATH, 'a') as f:
+                f.write(data)
             return True
         except BaseException as e:
             print("Error on_data %s" % str(e))
