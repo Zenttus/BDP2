@@ -57,6 +57,7 @@ class DataSaver(StreamListener):
 
         if(self.tick-time.clock() > config.INTERVAL):
             # Time interval completed, reseting and createing a new file
+            print("here")
             self.tick = time.clock()
             self.files.append(config.OUTPUT_FILE_PATH + strftime("%d%b%Y%H:%M:%S", gmtime()) + ".json")
             put = subprocess.Popen(["hdfs", "dfs", "-touchz", self.files[-1]],shell=True)
