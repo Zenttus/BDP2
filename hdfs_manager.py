@@ -26,7 +26,7 @@ class HDFSManager:
     def update_file_list(self):
 
         # Creates list to keep track of files
-        filelist = open(config.LIST_PATH + "tweetsList.txt", "a+")
+        filelist = open(config.LIST_PATH + "./tweetsList.txt", "a+")
         filelist.write(self.currentfile + "\n")
         filelist.close()
 
