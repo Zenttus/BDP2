@@ -33,8 +33,6 @@ class HDFSManager:
         # Define new file path
         self.currentfile = config.OUTPUT_FILE_PATH + strftime("%d%b%Y_%H%M%S", gmtime()) + ".json"
 
-        # Restart countdown
-        self.tick = current_milli_time()
 
     def save_tweet(self, tweet):
 
@@ -49,7 +47,7 @@ class HDFSManager:
         #Once the interval is done, send file to HDFS and start a new one.
         print(current_milli_time() - self.tick)
         print(config.INTERVAL * 1000)
-        
+
         if current_milli_time() - self.tick > config.INTERVAL * 1000:
             print("Moving tweets to hdfs...")
             # Send new file to HDFS
@@ -58,8 +56,12 @@ class HDFSManager:
 
             # Rename in HDFS
             put = subprocess.Popen(['hdfs dfs -mv ' + config.OUTPUT_FILE_PATH + 'temp.json ' + self.currentfile])
-
+            put.communicate()
+            
             self.update_file_list()
+
+            # Restart countdown
+            self.tick = current_milli_time()
 
             # Clear temp file
             open("./temp.json", "w").close()
