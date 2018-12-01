@@ -49,7 +49,7 @@ class HDFSManager:
         #Once the interval is done, send file to HDFS and start a new one.
 
         if current_milli_time() - self.tick > config.INTERVAL * 1000:
-
+            print("Moving tweets to hdfs...")
             # Send new file to HDFS
             put = subprocess.Popen(['hdfs dfs -put ./temp.json ' + config.OUTPUT_FILE_PATH], shell=True)
             put.communicate()
@@ -61,4 +61,5 @@ class HDFSManager:
 
             # Clear temp file
             open("./temp.json", "w").close()
+            print("DONE")
 
