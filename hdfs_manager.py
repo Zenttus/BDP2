@@ -15,7 +15,7 @@ class HDFSManager:
         self.client_hdfs = InsecureClient(config.HDFS_SERVER) #toDO STILL NECESARY?
 
         # Create folder path
-        subprocess.Popen(['hdfs -dfs mkdir ' + config.OUTPUT_FILE_PATH], shell=True)
+        subprocess.Popen(['hdfs -fs mkdir ' + config.OUTPUT_FILE_PATH], shell=True)
 
         # Start tracking time
         self.tick = current_milli_time
