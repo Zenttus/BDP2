@@ -50,7 +50,7 @@ class HDFSManager:
         if self.tick - current_milli_time > config.INTERVAL * 1000:
 
             # Send new file to HDFS
-            put = subprocess.Popen(['hdfs dfs -put ./temp.json ' + config.OUTPUT_FILE_PATH], shell=True)
+            put = subprocess.Popen(['hdfs fs -put ./temp.json ' + config.OUTPUT_FILE_PATH], shell=True)
             put.communicate()
 
             # Rename in HDFS
