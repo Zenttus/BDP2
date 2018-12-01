@@ -47,7 +47,9 @@ class HDFSManager:
             output.close()
 
         #Once the interval is done, send file to HDFS and start a new one.
-
+        print(current_milli_time() - self.tick)
+        print(config.INTERVAL * 1000)
+        
         if current_milli_time() - self.tick > config.INTERVAL * 1000:
             print("Moving tweets to hdfs...")
             # Send new file to HDFS
