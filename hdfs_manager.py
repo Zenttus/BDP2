@@ -15,7 +15,7 @@ class HDFSManager:
         self.client_hdfs = InsecureClient(config.HDFS_SERVER) #toDO STILL NECESARY?
 
         # Create folder path
-        subprocess.Popen(['hdfs -fs mkdir ' + config.OUTPUT_FILE_PATH], shell=True)
+        subprocess.Popen(['hdfs dfs -mkdir ' + config.OUTPUT_FILE_PATH], shell=True)
 
         # Start tracking time
         self.tick = current_milli_time
@@ -50,11 +50,11 @@ class HDFSManager:
         if self.tick - current_milli_time > config.INTERVAL * 1000:
 
             # Send new file to HDFS
-            put = subprocess.Popen(['hdfs fs -put ./temp.json ' + config.OUTPUT_FILE_PATH], shell=True)
+            put = subprocess.Popen(['hdfs dfs -put ./temp.json ' + config.OUTPUT_FILE_PATH], shell=True)
             put.communicate()
 
             # Rename in HDFS
-            put = subprocess.Popen(['hadoop fs -mv ' + config.OUTPUT_FILE_PATH + '/temp.json ' + self.currentfile])
+            put = subprocess.Popen(['hadoop dfs -mv ' + config.OUTPUT_FILE_PATH + '/temp.json ' + self.currentfile])
 
             self.update_file_list()
 
