@@ -57,7 +57,7 @@ class HDFSManager:
             # Rename in HDFS
             put = subprocess.Popen(['hdfs dfs -mv ' + config.OUTPUT_FILE_PATH + 'temp.json ' + self.currentfile])
             put.communicate()
-            
+
             self.update_file_list()
 
             # Restart countdown
