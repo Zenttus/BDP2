@@ -55,7 +55,7 @@ class HDFSManager:
             put.communicate()
 
             # Rename in HDFS
-            put = subprocess.Popen(['hadoop dfs -mv ' + config.OUTPUT_FILE_PATH + 'temp.json ' + self.currentfile])
+            put = subprocess.Popen(['hdfs dfs -mv ' + config.OUTPUT_FILE_PATH + 'temp.json ' + self.currentfile])
 
             self.update_file_list()
 
