@@ -8,7 +8,7 @@ import requests
 conf = SparkConf()
 conf.setAppName("TwitterStreamApp")
 # create spark context with the above configuration
-sc = SparkContext(conf=conf)
+sc = SparkContext(_conf=conf)
 sc.setLogLevel("ERROR")
 
 df = spark.read.json("/user/hdfs/tweets/02Dec2018_203919.json")
