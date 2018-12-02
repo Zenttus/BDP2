@@ -51,12 +51,12 @@ class HDFSManager:
         if current_milli_time() - self.tick > config.INTERVAL * 1000:
             print("Moving tweets to hdfs...")
             # Send new file to HDFS
-            put = subprocess.Popen(['hdfs dfs -put ./temp.json ' + config.OUTPUT_FILE_PATH], shell=True)
+            put = subprocess.Popen(['hdfs dfs -put ./temp.json ' + config.OUTPUT_FILE_PATH + self.currentfile], shell=True)
             put.communicate()
 
             # Rename in HDFS
-            put = subprocess.Popen(['hdfs dfs -mv ' + config.OUTPUT_FILE_PATH + 'temp.json ' + self.currentfile])
-            put.communicate()
+            #put = subprocess.Popen(['hdfs dfs -mv ' + config.OUTPUT_FILE_PATH + 'temp.json ' + self.currentfile])
+           # put.communicate()
 
             self.update_file_list()
 
