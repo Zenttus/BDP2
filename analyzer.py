@@ -1,7 +1,5 @@
 # tf = sc.textFile('hdfsPath')
-from pyspark import SparkSession
+from pyspark import SparkConf, SparkContext
 
-spark = SparkSession.builder.appName('Basics').getOrCreate()
-
-df = spark.read.json("/user/hdfs/tweets/02Dec2018_203919.json")
+df = sc.read.json("/user/hdfs/tweets/02Dec2018_203919.json")
 df.show()
