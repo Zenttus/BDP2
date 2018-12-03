@@ -1,5 +1,5 @@
 # tf = sc.textFile('hdfsPath')
-from pyspark.sql import SparkSession
+from pyspark import SparkSession
 
 spark = SparkSession.builder.appName('Basics').getOrCreate()
 
