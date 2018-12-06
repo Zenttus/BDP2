@@ -1,13 +1,11 @@
-import sys
-import tweets_catcher
-from hdfs_manager import HDFSManager
-#TODO get modules
+import tweets_catcher, visualization
+from tweets_catcher import HDFSManager
+
 
 if __name__ == '__main__':
 
     #TODO spark analysis
-    #TODO gui
 
     manager = HDFSManager()
-
     tweets_catcher.get_tweets(manager)
+    visualization.run()

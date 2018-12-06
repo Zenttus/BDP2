@@ -2,7 +2,7 @@ from tweepy.streaming import StreamListener
 from tweepy import OAuthHandler
 from tweepy import Stream
 
-from hdfs import InsecureClient
+# TODO delete files
 
 import config
 
@@ -11,26 +11,27 @@ import time
 import subprocess
 from time import strftime, gmtime
 
-class TwitterStreamer():
+
+class TwitterStreamer:
     """
     Class for streaming tweets
     """
-    def __init__(self):
-        pass
-
-    def stream_tweets(self, verbose=True):
-        # Twitter set up and authentication
+    @staticmethod
+    def stream_tweets(ver=True):
+        # Authentication
         auth = OAuthHandler(config.CONSUMER_KEY, config.CONSUMER_SECRET)
         auth.set_access_token(config.ACCESS_TOKEN, config.ACCESS_TOKEN_SECRET)
 
         # Setting output
-        listener = DataSaver(verbose)
+        listener = DataSaver(ver)
 
-        stream = Stream(auth, listener,stall_warnings=True,async=True,filter_level='medium')
+        stream = Stream(auth, listener, stall_warnings=True, _async=True, filter_level='medium')
+
         try:
             while True:
                 try:
                     stream.sample()
+                    time.sleep(config.INTERVAL) #halts the control for runtime seconds
                 except KeyboardInterrupt:
                     print('KEYBOARD INTERRUPT')
                     return
@@ -42,41 +43,38 @@ class DataSaver(StreamListener):
     """
     Saves the tweets in intervals.
     """
-    def __init__(self, verbose):
-        self.verbose = verbose
+    def __init__(self, ver):
+        self.verbose = ver
 
-        # Start comunication with HDFS
-        self.client_hdfs = InsecureClient(config.HDFS_SERVER)
-
-        # Start tracking time
-        self.tick = time.clock()
+        # Start communication with HDFS
+        #self.client_hdfs = InsecureClient(config.HDFS_SERVER)
 
         # Create new file for tweets
-        self.files = [ config.OUTPUT_FILE_PATH + strftime("%d%b%Y_%H%M%S", gmtime()) + ".json" ]
+        #self.files = [ config.OUTPUT_FILE_PATH + strftime("%d%b%Y_%H%M%S", gmtime()) + ".json" ]
 
-        print("hdfs dfs -touchz " + self.files[-1])
-        put = subprocess.Popen(["hdfs dfs -touchz " + self.files[-1]], shell=True)
-        put.communicate()
+       ### put = subprocess.Popen(["hdfs dfs -touchz " + self.files[-1]], shell=True)
+       # put.communicate()
 
         # Creates list to keep track of files
-        self.fileList = open(config.LIST_PATH + "tweetsList.txt", "a+")
-        self.fileList.write(self.files[-1] + "\n")
+       # self.fileList = open(config.LIST_PATH + "tweetsList.txt", "a+")
+       # self.fileList.write(self.files[-1] + "\n")
+        self.tempFile = open("./temp.json", "a+")
+
+    def send_tweets_hdfs(self):
+        self.fileList.write(self.files[-1] + "\n") #update file list
+
+        self.files.append(config.OUTPUT_FILE_PATH + strftime("%d%b%Y%H:%M:%S", gmtime()) + ".json")
+        self.tempFile.close()
+        put = subprocess.Popen(["hdfs", "hadoop", "fs," "-put", "./temp.json", self.files[-1]], shell=True)
+        put.communicate()
 
     def on_data(self, data):
 
-        if(time.clock()-self.tick > config.INTERVAL):
-            # Time interval completed, reseting and createing a new file
-            print("here")
-            self.tick = time.clock()
-            self.files.append(config.OUTPUT_FILE_PATH + strftime("%d%b%Y%H:%M:%S", gmtime()) + ".json")
-            put = subprocess.Popen(["hdfs", "dfs", "-touchz", self.files[-1]],shell=True)
-            put.communicate()
-            self.fileList.write(self.files[-1] + "\n") #update file list
-
         try:
-            if(self.verbose):
+            if self.verbose:
                 print(data)
-            self.client_hdfs.write(self.files[-1], data = data, append=True, encoding = 'utf-8')
+            #self.tempFile.write(data)
+            #self.client_hdfs.write(self.files[-1], data = data, append=True, encoding = 'utf-8')
             return True
 
         except BaseException as e:
@@ -87,22 +85,12 @@ class DataSaver(StreamListener):
 
     def on_error(self, status):
         print(status)
-        stream.disconnect()
-        self.fileList.close()
+        #self.fileList.close()
         if status == 420: #Rate limit occurs
             return False
+    
+    def on_exception(self,e):
+        print(e)
+        return
 
 
-
-if __name__ == '__main__':
-
-    #TODO spark analysis
-    #TODO delete files
-    #TODO gui
-    verbose = True  # Print tweets on terminal
-
-    if(len(sys.argv)>1):
-        verbose = (sys.argv[1] == 'True')
-
-    streamer = TwitterStreamer()
-    streamer.stream_tweets(verbose)
