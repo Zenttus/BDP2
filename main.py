@@ -8,4 +8,4 @@ if __name__ == '__main__':
 
     manager = HDFSManager()
     tweets_catcher.get_tweets(manager)
-    visualization.run()
+    #visualization.run()

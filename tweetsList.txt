@@ -1,0 +1,4 @@
+/user/hdfs/tweets/25Nov2018_040155.json
+/user/hdfs/tweets/01Dec2018_001312.json
+/user/hdfs/tweets/01Dec2018_001616.json
+/user/hdfs/tweets/01Dec2018_001630.json

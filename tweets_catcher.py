@@ -60,7 +60,7 @@ class HDFSManager:
     def save_tweet(self, tweet):
 
         try:
-            output = open("./temp.json", "a+", encoding='utf-8')
+            output = open("./temp.json", "a+")
             output.write(str(tweet) + '\n')
         except Exception as e:
             print(e)
