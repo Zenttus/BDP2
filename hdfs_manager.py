@@ -3,6 +3,7 @@ from hdfs import InsecureClient
 from time import strftime, gmtime
 import subprocess
 import time
+import analyzer
 
 current_milli_time = lambda: int(round(time.time() * 1000))
 
@@ -58,5 +59,8 @@ class HDFSManager:
 
             # Clear temp file
             open("./temp.json", "w").close()
+            print("DONE")
+            print("Analysing data...")
+            analyzer.run()
             print("DONE")
 

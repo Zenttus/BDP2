@@ -76,6 +76,3 @@ def run(visuals=True):
     print('Done')
     if visuals:
         show(p)
-
-
-run()
